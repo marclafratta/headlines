@@ -2,7 +2,7 @@ import feedparser
 import json
 from urllib.request import urlopen
 import urllib
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 
 application = Flask(__name__)
 
@@ -22,6 +22,7 @@ DEFAULTS = {'publication': 'ctv',
 # API Urls
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=35a35cfa5c2355830abde9fe2c1896d0"
 CURRENCY_URL = "http://openexchangerates.org//api/latest.json?app_id=497a7259f46147d58a2821d70f73d21f"
+
 
 @application.route("/")
 def get_news():
@@ -83,11 +84,6 @@ def get_rate(frm, to):
     frm_rate = parsed.get(frm.upper())
     to_rate = parsed.get(to.upper())
     return (to_rate / frm_rate, parsed.keys())
-
-
-@application.route('/favicon.ico')
-def hello():
-    return redirect(url_for('static', filename='favicon.ico'), code=302)
 
 
 if __name__ == '__main__':
