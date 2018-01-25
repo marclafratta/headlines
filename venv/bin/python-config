@@ -1,4 +1,4 @@
-#!/Users/marclafratta/PycharmProjects/headlines/venv/bin/python
+#!/Users/marclafratta/PycharmProjects/headlnes2/venv/bin/python
 
 import sys
 import getopt
