@@ -11,21 +11,40 @@ RSS_FEEDS = {'bbc': 'http://feeds.bbci.co.uk/news/rss.xml',
              'fox': 'http://feeds.foxnews.com/foxnews/latest',
              'iol': 'http://www.iol.co.za.ezproxy.torontopubliclibrary.ca/cmlink/1.640',
              'cbc': 'http://rss.cbc.ca/lineup/topstories.xml',
+             'ctv': 'http://ctvnews.ca/rss/TopStories',
              'torstar': 'http://www.thestar.com/feeds.topstories.rss'}
 
+DEFAULTS = {'publication': 'ctv',
+            'city': 'Toronto'}
 
 @application.route("/")
 def get_news():
-    query = request.args.get("publication")
+    # get custom publication or default
+    publication = request.args.get('publication')
+    if not publication or publication.lower() not in RSS_FEEDS:
+        publication = DEFAULTS['publication']
+    else:
+        publication = publication.lower()
+
+    articles = get_news(publication)
+
+    # get customized weather based on user input or default
+    city = request.args.get('city')
+    if not city:
+        city = DEFAULTS['city']
+
+    weather = get_weather(city)
+
+    return render_template("home.html", articles=articles, weather=weather)
+
+
+def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
-        publication = "torstar"
+        publication = DEFAULTS["publication"]
     else:
         publication = query.lower()
-
     feed = feedparser.parse(RSS_FEEDS[publication])
-    weather = get_weather("Toronto")
-
-    return render_template("home.html", articles=feed['entries'], weather=weather)
+    return feed['entries']
 
 
 def get_weather(query):
