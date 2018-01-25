@@ -8,14 +8,14 @@ RSS_FEEDS = {'bbc': 'http://feeds.bbci.co.uk/news/rss.xml',
              'fox': 'http://feeds.foxnews.com/foxnews/latest',
              'iol': 'http://www.iol.co.za.ezproxy.torontopubliclibrary.ca/cmlink/1.640',
              'cbc': 'http://rss.cbc.ca/lineup/topstories.xml',
-             'ctv': 'http://ctvnews.ca/rss/TopStories'}
+             'torstar': 'http://www.thestar.com/feeds.topstories.rss'}
 
 
-@application.route("/")
+@application.route("/", methods=['GET', 'POST'])
 def get_news():
-    query = request.args.get("publication")
+    query = request.form.get("publication")
     if not query or query.lower() not in RSS_FEEDS:
-        publication = "ctv"
+        publication = "torstar"
     else:
         publication = query.lower()
 
